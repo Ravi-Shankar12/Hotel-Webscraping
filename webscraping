@@ -1,0 +1,52 @@
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+Response = requests.get('https://www.qantas.com/hotels/properties/18482?adults=2&checkIn=2023-11-18&checkOut=2023-11-19&children=0&infants=0&location=London%2C%20England%2C%20United%20Kingdom&page=1&payWith=cash&searchType=list&sortBy=popularity')
+
+Soup = BeautifulSoup(Response.content,'html.parser')
+Room_Names=Soup.find_all(name='div',class_='css-v9e3m6-Hide e1iw1znz0')
+Room_Name=[]
+for i in Room_Names:
+    d=i.get_text()
+    Room_Name.append(d)
+print(Room_Name)
+
+Rates=Soup.find_all('div',class_='css-1i8ttd3-Box e1m6xhuh0')
+Rate=[]
+for i in Rates:
+    d=i.get_text()
+    Rate.append(d)
+print(Rate)
+
+Currencies=Soup.find_all('div',class_='css-1dvtiwl-Box e1m6xhuh0')
+Currency=[]
+for i in Currencies:
+    d=i.get_text()
+    Currency.append(d)
+print(Currency)
+
+Policies=Soup.find_all('div',class_='css-1rmze0d-Box e1m6xhuh0')
+Policy=[]
+for i in Policies:
+    d=i.get_text()
+    Policy.append(d)
+print(Policy)
+
+Guests=Soup.find_all('div',class_='css-92q66n-Text epfmh1m0')
+Guest=[]
+for i in Guests:
+    d=i.get_text()
+    Guest.append(d)
+print(Guest)
+
+df = pd.DataFrame()
+df['Room_Names']= Room_Name
+df['Rates']=Rate
+df['Currencies']=Currency
+df['Policies']=Policy
+df['Guests']= Guest
+df.to_csv('Hotels Webscraping')
+
+
+
+
